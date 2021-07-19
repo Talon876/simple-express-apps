@@ -1,0 +1,25 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+</head>
+<body>
+    <h1>URL Shortener Service</h1>
+    <p>Enter a URL that you would like to shorten</p>
+    <form action="/add-url" method="POST">
+        <input type="text" name="longUrl" placeholder="https://example.com/"/>
+        <button type="submit">Shorten!</button>
+    </form>
+    <p>
+        Currently <%= numUrlsKnown %> URLs saved.
+    </p>
+    <a href="/urls">View URLs</a>
+    <% if (isElinksUser) { %>
+        <p>
+            <small>Nice Old School Browser!</small>
+        </p>
+    <% } %>
+</body>
+</html>
