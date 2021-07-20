@@ -39,6 +39,7 @@ const renderHomePage = async () => {
     `
     addLink(contentDiv, "/urls", "View URLs", (e) => {
         e.preventDefault()
+        history.pushState({ page: "All URLs"}, null, "/urls")
         renderUrlsPage()
     })
     const addUrlForm = document.querySelector("#addUrlForm")
@@ -53,19 +54,20 @@ const renderHomePage = async () => {
         const responseBody = await response.json()
         console.log(`Received Response: ${response.status}, body: ${JSON.stringify(responseBody)}`)
         const shortId = responseBody.success ? responseBody.data.shortId : null
+        const shortUrlPath = responseBody.success ? responseBody.data.shortUrlPath : null
         const errorMsg = responseBody.success ? null : responseBody.data.message
-        renderResultPage(responseBody.success, shortId, errorMsg)
+        renderResultPage(responseBody.success, shortId, errorMsg, shortUrlPath)
     })
 }
 
-const renderResultPage = (success, shortId, errorMsg) => {
+const renderResultPage = (success, shortId, errorMsg, shortUrlPath) => {
     console.log(`Rendering result page, success = ${success}, shortId = ${shortId}`)
     const contentDiv = document.querySelector("#content")
     if (success) {
         contentDiv.innerHTML = `
         <p>
             Thank you for the link! It has been saved with ID <pre>${shortId}</pre>
-            You can navigate to it here: <a href="/url/${shortId}">Click Me</a>
+            You can navigate to it here: <a href="${shortUrlPath}">Click Me</a>
         </p>
         `
     } else {
@@ -76,6 +78,7 @@ const renderResultPage = (success, shortId, errorMsg) => {
     const homeLinkText = success ? "Home" : "Back"
     addLink(contentDiv, "/", homeLinkText, (e) => {
         e.preventDefault()
+        history.pushState({ page: "Home"}, null, "/")
         renderHomePage()
     })
 }
@@ -103,6 +106,7 @@ const renderUrlsPage = async () => {
         const shortIdLink = document.createElement('a')
         shortIdLink.appendChild(document.createTextNode(url.shortId))
         shortIdLink.href = `/url/${url.shortId}`
+        shortIdLink.target = "_blank"
         shortIdTd.appendChild(shortIdLink)
         row.appendChild(shortIdTd)
 
@@ -118,6 +122,7 @@ const renderUrlsPage = async () => {
     const contentDiv = document.querySelector("#content")
     addLink(contentDiv, "/", "Home", (e) => {
         e.preventDefault()
+        history.pushState({ page: "Home"}, null, "/")
         renderHomePage()
     })
 }
