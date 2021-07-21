@@ -94,7 +94,7 @@ const HomePage = () => {
   const errorMessageContent = (msg) => {
     return (
       <>
-        <strong style={{color: "red"}}>{apiResponse.data.message}</strong>
+        <strong style={{color: "red"}}>{msg}</strong>
         {"\n"}
         <a href="/" onClick={(e) => {
           e.preventDefault()
