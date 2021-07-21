@@ -54,7 +54,7 @@ const renderHomePage = async () => {
         const responseBody = await response.json()
         console.log(`Received Response: ${response.status}, body: ${JSON.stringify(responseBody)}`)
         const shortId = responseBody.success ? responseBody.data.shortId : null
-        const shortUrlPath = responseBody.success ? responseBody.data.shortUrlPath : null
+        const shortUrlPath = responseBody.success ? responseBody.data.relativePath : null
         const errorMsg = responseBody.success ? null : responseBody.data.message
         renderResultPage(responseBody.success, shortId, errorMsg, shortUrlPath)
     })
@@ -67,7 +67,7 @@ const renderResultPage = (success, shortId, errorMsg, shortUrlPath) => {
         contentDiv.innerHTML = `
         <p>
             Thank you for the link! It has been saved with ID <pre>${shortId}</pre>
-            You can navigate to it here: <a href="${shortUrlPath}">Click Me</a>
+            You can navigate to it here: <a href="${shortUrlPath}" target="_blank">Click Me</a>
         </p>
         `
     } else {
@@ -88,7 +88,8 @@ const renderUrlsPage = async () => {
     const response = await window.fetch("/api/urls.json")
     const allUrls = await response.json()
     console.log(`URLS Data: ${JSON.stringify(allUrls)}`)
-    document.querySelector("#content").innerHTML = `
+    const contentDiv = document.querySelector("#content")
+    contentDiv.innerHTML = `
     <p>Displaying all ${allUrls.length} URLs</p>
     <table id="urlTable">
         <tr>
@@ -119,7 +120,6 @@ const renderUrlsPage = async () => {
         row.appendChild(visitCountTd)
         urlTable.appendChild(row)
     })
-    const contentDiv = document.querySelector("#content")
     addLink(contentDiv, "/", "Home", (e) => {
         e.preventDefault()
         history.pushState({ page: "Home"}, null, "/")
